@@ -1,0 +1,60 @@
+<urlrewrite>
+	<!-- Creating rules for pre-existing servlets/folders with specific names -->
+	<!-- <rule> <from>(/URLParser)/?</from> <to>$1</to> </rule> <rule> <from>(/Index)/?</from> 
+		<to>$1</to> </rule> <rule> <from>(/SignUp)/?</from> <to>$1</to> </rule> <rule> 
+		<from>(/WEB-INF/*)</from> <to>$1</to> </rule> <rule> <from>(/css/*)</from> 
+		<to>$1</to> </rule> <rule> <from>(/fonts/*)</from> <to>$1</to> </rule> <rule> 
+		<from>(/images/*)</from> <to>$1</to> </rule> <rule> <from>(/js/*)</from> 
+		<to>$1</to> </rule> -->
+	<!-- Rules for pages that require additional parameters -->
+	<rule>
+		<from>^/listEmployee</from>
+		<to>/MainController?action=listEmployee</to>
+	</rule>
+	<rule>
+		<from>^/listAsset</from>
+		<to>/MainController?action=listAsset</to>
+	</rule>
+	<rule>
+		<from>^/listAsset</from>
+		<to>/MainController?action=listAsset</to>
+	</rule>
+	<rule>
+		<from>^/(viewEmployee)/([^/]+)/([^/]+)?</from>
+		<to>/MainController?action=$1&amp;empcode=$2&amp;designationID=$3&amp;view=view</to>
+	</rule>
+	<!-- Catch-all rule for any page that does not meet above criteria (only 
+		parameter is action - Ex: 'unison-bdr.com/newPartner') -->
+	<!--<rule> <condition type="request-uri" operator="notequal">^/Index.*$</condition> 
+		<from>/([a-z,A-Z]+)(/[^/]*)?</from> <to>/URLParser?action=$1</to> </rule> -->
+	<rule>
+		<note>
+			The rule means that requests to /test/status/ will be redirected
+			to
+			/rewrite-status
+			the url will be rewritten.
+		</note>
+		<from>/test/status/</from>
+		<to type="redirect">%{context-path}/rewrite-status</to>
+	</rule>
+	<outbound-rule>
+		<note>
+			The outbound-rule specifies that when response.encodeURL is
+			called (if
+			you are using JSTL c:url)
+			the url /rewrite-status will be
+			rewritten to /test/status/.
+
+			The above rule and this outbound-rule
+			means that end users should never
+			see the
+			url /rewrite-status only
+			/test/status/ both in thier location bar and in
+			hyperlinks
+			in your
+			pages.
+		</note>
+		<from>/rewrite-status</from>
+		<to>/test/status/</to>
+	</outbound-rule>
+</urlrewrite>
